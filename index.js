@@ -9,6 +9,7 @@ server.use(cors())
 server.use(express.json())
 server.use(router)
 const PORT = 4000 || process.env.PORT
+server.use('/uploads',express.static('./uploads'))
 server.listen(PORT,()=>{
     console.log(`server started at port:${PORT}`);
 })

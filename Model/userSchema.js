@@ -32,9 +32,10 @@ const userSchema = new mangoose.Schema({
     type: Boolean,
     default: false,
   },
-role:  {type: String, // Array of roles
+role:  {
+  type:[ String], // Array of roles
     enum: ["admin", "user", "host"],
-    default: "user",
+    default: ["user"],
   },
   Adress: {
     type: String,
