@@ -5,7 +5,9 @@ const jwtMiddleWare = require('../Middleware/jwtMiddleware')
 const multerConfig = require('../Middleware/multerMiddleWare')
 const homesController = require('../Controller/productController')
 const { wishListController, getWishList, removeWishlist } = require('../Controller/wishlistController')
-const { yourHome, getChecks, requestBooking, editChekinDates, editChekoutDate, editGuestsNo, listProductsUser } = require('../Controller/CheckoutController')
+const { yourHome, getChecks, requestBooking, editChekinDates, editChekoutDate, editGuestsNo, listProductsUser, confirmBookingWithPaypal } = require('../Controller/CheckoutController')
+const { createOrder, captureOrder } = require('../Controller/payapalController')
+const { OrderedBulkOperation } = require('mongodb')
 const router = new express.Router()
 router.post('/user/register',Usercontroller.userRegister)
 router.get('/user/register',jwtMiddleWare,Usercontroller.togetAllUsers)
@@ -30,4 +32,44 @@ router.put('/user/edits',jwtMiddleWare,Usercontroller.userEdit)
 router.get('/homes/host',jwtMiddleWare,hostcontroller.togetUserDetails)
 router.get('/product/host/:id',homesController.getHost)
 router.put('/product/edit',multerConfig.single('uploadedImage'),homesController.editHomes)
+
+
+router.post('/my-server/create-paypal-order', async (req, res) => {
+    try {
+      const { totalAmount } = req.body;
+  console.log(totalAmount+"totak");
+      // Call the controller function to create a PayPal order
+      const orderID = await createOrder(totalAmount);
+  
+      res.status(200).json({
+        orderID: orderID,
+        message: 'PayPal order created successfully',
+      });
+      console.log(orderID+"orderId");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  });
+  router.post('/my-server/capture-paypal-order', async (req, res) => {
+    const {orderID} = req.body;
+    console.log(OrderedBulkOperation);
+
+    try {
+        const captureData = await captureOrder(orderID);
+        res.status(200).json({
+            message: 'Payment captured successfully',
+            captureData: captureData,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Failed to capture payment',
+            error: error.message,
+        });
+    }
+});
 module.exports = router
