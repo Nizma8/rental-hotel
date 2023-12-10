@@ -1,14 +1,16 @@
 const { ObjectId } = require("mongodb")
 const checks = require("../Model/checkOutSchema")
 const homes = require("../Model/projectSchema")
+const { update } = require("tar")
+const reviews = require("../Model/RatingSchema")
 
 exports.yourHome = async(req,res)=>{
-    const {productId,checkIn, checkOut,guests,booking}=req.body
+    const {productId,checkIn, checkOut,guests,booking,review}=req.body
     const userId = req.userId
 
    try {
     const newChecks = new checks({
-        userId,productId,checkIn,checkOut,guests,booking
+        userId,productId,checkIn,checkOut,guests,booking,review
         
     })
     await newChecks.save()
@@ -149,3 +151,29 @@ exports.yourHome = async(req,res)=>{
     
  
  }
+
+ // add review :yes
+
+//  exports.reviewsChecks = async (req, res) => {
+//   const userId = req.userId;
+//   const { productId } = req.body;
+
+//   try {
+//     // Check if the user and property combination exists in the reviews collection
+//     const existingReview = await reviews.findOne({
+//       userId: userId,
+//       propertyDetails: productId,
+//     });
+
+//     if (!existingReview) {
+//       // If the user and property combination does not exist in reviews, return an error
+//       return res.status(404).json({ message: 'No matching review found.' });
+//     }
+
+//     // Update the matching document in the checks collection
+    
+//   } catch (error) {
+//     console.error('Error updating review:', error.message);
+//     res.status(500).json({ error: 'Internal server error.' });
+//   }
+// };

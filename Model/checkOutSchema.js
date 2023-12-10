@@ -29,7 +29,10 @@ const mongoose = require('mongoose')
     homeDetails: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "homes"
-    }
+    },review: {
+        type: Boolean,
+        default: false,
+      },
 
  })
 

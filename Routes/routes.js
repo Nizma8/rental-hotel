@@ -5,9 +5,9 @@ const jwtMiddleWare = require('../Middleware/jwtMiddleware')
 const multerConfig = require('../Middleware/multerMiddleWare')
 const homesController = require('../Controller/productController')
 const { wishListController, getWishList, removeWishlist } = require('../Controller/wishlistController')
-const { yourHome, getChecks, requestBooking, editChekinDates, editChekoutDate, editGuestsNo, listProductsUser, confirmBookingWithPaypal } = require('../Controller/CheckoutController')
+const { yourHome, getChecks, requestBooking, editChekinDates, editChekoutDate, editGuestsNo, listProductsUser, confirmBookingWithPaypal, reviewsChecks } = require('../Controller/CheckoutController')
 const { createOrder, captureOrder } = require('../Controller/payapalController')
-const { OrderedBulkOperation } = require('mongodb')
+const { ReviewController, getReviewController } = require('../Controller/ReviewContoller')
 const router = new express.Router()
 router.post('/user/register',Usercontroller.userRegister)
 router.get('/user/register',jwtMiddleWare,Usercontroller.togetAllUsers)
@@ -56,7 +56,6 @@ router.post('/my-server/create-paypal-order', async (req, res) => {
   });
   router.post('/my-server/capture-paypal-order', async (req, res) => {
     const {orderID} = req.body;
-    console.log(OrderedBulkOperation);
 
     try {
         const captureData = await captureOrder(orderID);
@@ -72,4 +71,8 @@ router.post('/my-server/create-paypal-order', async (req, res) => {
         });
     }
 });
+
+router.post('/user/review',jwtMiddleWare,ReviewController)
+router.get('/user/review',jwtMiddleWare,getReviewController)
+// router.put('/check/update/review',jwtMiddleWare,reviewsChecks)
 module.exports = router
