@@ -131,13 +131,10 @@ exports.getHost = async (req, res) => {
   try {
     // Find product details
     const productDetails = await homes.findById({ _id: id });
-    console.log(productDetails);
-
     // Check if productDetails exists and has a hostId
     if (productDetails && productDetails.hostId) {
       // Find host details using hostId
       const hostDetails = await Host.findById({ _id: productDetails.hostId });
-      console.log(hostDetails);
 
       // Check if hostDetails exists
       if (hostDetails) {

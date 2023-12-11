@@ -7,7 +7,7 @@ const homesController = require('../Controller/productController')
 const { wishListController, getWishList, removeWishlist } = require('../Controller/wishlistController')
 const { yourHome, getChecks, requestBooking, editChekinDates, editChekoutDate, editGuestsNo, listProductsUser, confirmBookingWithPaypal, reviewsChecks } = require('../Controller/CheckoutController')
 const { createOrder, captureOrder } = require('../Controller/payapalController')
-const { ReviewController, getReviewController } = require('../Controller/ReviewContoller')
+const { ReviewController, getReviewController, filterReviewsController } = require('../Controller/ReviewContoller')
 const router = new express.Router()
 router.post('/user/register',Usercontroller.userRegister)
 router.get('/user/register',jwtMiddleWare,Usercontroller.togetAllUsers)
@@ -74,5 +74,6 @@ router.post('/my-server/create-paypal-order', async (req, res) => {
 
 router.post('/user/review',jwtMiddleWare,ReviewController)
 router.get('/user/review',jwtMiddleWare,getReviewController)
+router.get('/product/review/:id',jwtMiddleWare,filterReviewsController)
 // router.put('/check/update/review',jwtMiddleWare,reviewsChecks)
 module.exports = router

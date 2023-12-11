@@ -1,15 +1,12 @@
 const jwt = require('jsonwebtoken')
 
 const jwtMiddleWare = (req,res,next)=>{
-  console.log(req.headers);
   const token = req.headers['authorization'].split(" ")[1]
   
   try{
     const jwtResponse = jwt.verify(token,"SecretKey123")
     req.userId = jwtResponse.userId;
     req.roles = jwtResponse.roles;
-     console.log("Inside middle ware");
-     console.log(req.userId);
     next()
   }
   catch(error){

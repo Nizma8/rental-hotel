@@ -3,9 +3,7 @@ const checks = require("../Model/checkOutSchema")
 
 exports.ReviewController =async(req,res)=>{
 const {propertyDetails,rating,title,description,date,likes,dislikes,suggestion}  = req.body
-console.log(propertyDetails+"property details");
 const userId = req.userId
-console.log(userId+"userId");
 try {
   // Check whether this user bought this home
   const userBuyHome = await checks.findOne({
@@ -13,7 +11,6 @@ try {
     userId: userId,
     booking: true,
   });
-console.log(userBuyHome);
   // Check if a review already exists for this user and property
   const existingReview = await reviews.findOne({
     propertyDetails: propertyDetails,
@@ -52,7 +49,6 @@ console.log(userBuyHome);
     });
   }
 } catch (error) {
-  console.error(error);
   res.status(500).json({
     message: "Internal server error",
   });
@@ -70,9 +66,28 @@ exports.getReviewController = async(req,res)=>{
     res.status(204).json("NO Reviews ")
   }}
   catch(error){
-    console.error(error);
     res.status(500).json({
       message: "Internal server error",
     });
   }
+}
+
+// filter review based on product id
+exports.filterReviewsController = async(req,res)=>{
+  const userId = req.userId
+  const {id}= req.params
+  
+try{  const filteredReviews = await reviews.find({propertyDetails:id}).populate('userId')
+       if(filteredReviews.length>0){
+        res.status(200).json(filteredReviews)
+       }else{
+        res.status(204).json("NO Reviews")
+       }
+}
+catch(error){
+  res.status(500).json({
+    message: "Internal server error",
+  });
+
+}
 }
