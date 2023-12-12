@@ -91,3 +91,22 @@ catch(error){
 
 }
 }
+
+// to get each review 
+
+exports.getEachReviewController = async(req,res)=>{
+
+  const { id } = req.params;
+   console.log(req.params+"oo");
+  try{const existingReview =await  reviews.findById(id)
+  console.log(existingReview);
+  if(existingReview){
+    res.status(200).json(existingReview)
+  }}catch(error){
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      
+    });
+  }
+}
