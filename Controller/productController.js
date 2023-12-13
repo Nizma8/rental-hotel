@@ -1,4 +1,3 @@
-const { ObjectId } = require("mongodb");
 const Host = require("../Model/hostSchema");
 const homes = require("../Model/projectSchema");
 
@@ -27,9 +26,7 @@ exports.homesController = async (req, res) => {
     if (!userRole) {
       return res.status(400).json({ message: "Host not found..." });
     }
-    // console.log(existingHome);
-    // console.log(productImage);
-    // console.log(name);
+    
     if (existingHome) {
       // console.log('Existing home found. Rejecting request.');
       return res.status(406).json({ message: "Home already exists." });
@@ -198,3 +195,11 @@ exports.editHomes = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+// to delete hosted property
+
+
+
+
+

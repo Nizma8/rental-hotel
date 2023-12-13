@@ -97,7 +97,6 @@ catch(error){
 exports.getEachReviewController = async(req,res)=>{
 
   const { id } = req.params;
-   console.log(req.params+"oo");
   try{const existingReview =await  reviews.findById(id)
   console.log(existingReview);
   if(existingReview){
@@ -110,3 +109,25 @@ exports.getEachReviewController = async(req,res)=>{
     });
   }
 }
+
+// to edit review
+
+exports.EditReview = async(req,res)=>{
+  const {id} = req.params
+  const {rating,title,description,suggestion} = req.body
+try {
+  const editedDetails = await reviews.findByIdAndUpdate({_id:id},{
+    rating,
+    title,
+    description,suggestion
+  },{new:true})
+  res.status(200).json(editedDetails)
+} catch (error) {
+  console.log(error);
+  res.status(500).json({
+    message: "Internal server error",
+    
+  });
+}
+}
+
